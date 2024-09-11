@@ -1,9 +1,28 @@
 module.exports.bookRoutes = async (fastify) => {
     fastify.get('/books', async (req, res) => {
+        let query = "SELECT * FROM books";
+        
+        const {authordName, publicationYear, orderBy, page, rowPage} = req.query;
+        
+        if(!!authordName || !!publicationYear) {
+            query += " WHERE "
+            if (!!authordName) {
+                query += "author in ('" + authordName.replace("," , "','") + "')";
+                if (!!publicationYear) query += " AND "
+            }
+            if (!!publicationYear) {
+                query += "published_year in (" + publicationYear + ")";
+            }
+        }
+
+        if (!!orderBy) {
+            query += " ORDER BY published_year " + orderBy;
+        }
+
         const client = await fastify.pg.connect();
         try {
-            const { rows } = await client.query("SELECT * FROM books");
-            res.send({result: rows});
+            const { rows } = await client.query(query);
+            res.send({result:!!page && !!rowPage ? paginate(rows, rowPage, page) : rows});
         } catch (error) {
             console.error(error)
             res.code(500).send('Error getting all boooks')
@@ -74,3 +93,7 @@ module.exports.bookRoutes = async (fastify) => {
     });
 }
 
+function paginate(rows, rownNum, page) {
+    const start= (page - 1) * rownNum, end = start + rownNum;
+    return rows.slice(start, end);
+}

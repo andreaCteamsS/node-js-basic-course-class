@@ -22,3 +22,5 @@ Content-Type: application/json
 }
 ### delimitatori di richieste
 delete http://localhost:3000/books/27 HTTP/1.1
+### delimitatori di richieste
+GET http://localhost:3000/books?authordName=Miguel de Cervantes,Dante Alighieri&publicationYear=1605,1851&orderBy=ASC&page=1&rowPage=10 HTTP/1.1
