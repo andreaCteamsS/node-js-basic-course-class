@@ -24,6 +24,8 @@ module.exports.bookRoutes = async (fastify) => {
             query += " ORDER BY published_year " + orderBy;
         }
 
+        query = query.replace(";", "");
+
         const client = await fastify.pg.connect();
         try {
             const { rows } = await client.query(query);
@@ -41,7 +43,10 @@ module.exports.bookRoutes = async (fastify) => {
         try {
             console.log("retrieving book id: " + id);
             const { rows } = await client.query(`SELECT * FROM books where id=$1`, [id]);
-            res.send({ result: rows });
+            if (rows.length) {
+                return res.send({ result: rows });
+            }
+            res.code(404);
         } catch (error) {
             console.error(error)
             res.code(500).send('Error getting all books')
@@ -87,8 +92,10 @@ module.exports.bookRoutes = async (fastify) => {
     fastify.delete('/books/:id', deleteBookOpts, async (req, res) => {
         const client = await fastify.pg.connect(), { id } = req.params;
         try {
-            await client.query(`DELETE FROM books where id=$1`, [id]);
-            res.send({ success: true });
+            const {rowCount} = await client.query(`DELETE FROM books where id=$1`, [id]);
+            if (rowCount > 0) {
+                res.send({ success: true });
+            } res.code(404);
         } catch (error) {
             console.error(error)
             res.code(500).send('Error getting all books')

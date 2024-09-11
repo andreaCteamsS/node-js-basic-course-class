@@ -3,21 +3,7 @@ const { POSTGRES_DB_CONNECTION } = require('./config/env');
 
 const app = require('./app').build(
     { logger: true },
-    {
-        openapi: {
-            openapi: "3.0.0",
-            info: {
-                title: "Library api",
-                description: "Library management api",
-                version: "0.1.0"
-            },
-            servers: [{
-                url: "http://localhost:3000",
-                description: "Dev server",
-            }]
-        },
-
-    },
+    {},
     {
         routePrefix: "/docs",
         uriConfig: { docExpansion: "full", deepLinking: false }
