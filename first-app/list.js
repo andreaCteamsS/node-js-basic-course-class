@@ -6,4 +6,5 @@ const _list = [
     new Customer(3,"paperino","paperino@email", 12345),
 ];
 
+
 module.exports.customerList = [..._list];
