@@ -8,7 +8,7 @@ POST http://localhost:3000/books HTTP/1.1
 Content-Type: application/json
 
 {
-"title": "Don Quixote 3", 
+"title": "Don Quixote 3647384", 
  "author": "Miguel de Cervantes",
  "isbn": "9780060934347",
  "published_year":  1605
@@ -23,4 +23,4 @@ Content-Type: application/json
 ### delimitatori di richieste
 delete http://localhost:3000/books/27 HTTP/1.1
 ### delimitatori di richieste
-GET http://localhost:3000/books?authordName=Miguel de Cervantes,Dante Alighieri&publicationYear=1605,1851&orderBy=ASC&page=1&rowPage=10 HTTP/1.1
+GET http://localhost:3000/books?authordName=Miguel de Cervantes&authordName=Dante Alighieri&publicationYear=1605&publicationYear=1851&orderBy=ASC&page=1&rowPage=10 HTTP/1.1
