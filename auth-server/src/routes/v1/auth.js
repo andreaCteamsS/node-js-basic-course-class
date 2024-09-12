@@ -14,18 +14,15 @@ module.exports.authRoutes = async (fastify) => {
             );
             const addedUser = rows[0];
             if (!!addedUser) {
-                const userToken = getJwtUser(addedUser.id, UserName, isAdmin);
-                return res.send({ userToken });
+                const token = getJwtUser(fastify, addedUser.id, UserName, isAdmin);
+                return res.status(201).send(successResponse(201, { token }));
             }
             throw new Error();
         } catch (error) {
-            console.error(error)
-            res.code(500).send('Error adding user')
+            res.status(500).send(errorResponse(500, 'Error adding user'))
         } finally {
             client.release()
         }
-
-
     });
 
     fastify.post('/login', loginOpts, async (req, res) => {
@@ -38,18 +35,17 @@ module.exports.authRoutes = async (fastify) => {
                 [UserName]
             );
             if (rows.length === 0) {
-                return res.code(404).send("User not found");
+                return res.code(404).send(errorResponse(401, "Not Found", "User doesnt exist"));
             }
             const { crcpassword, id, isadmin } = rows[0];
             const comparison = await fastify.bcrypt.compare(password, crcpassword);
             if (!comparison) {
-                return res.code(401).send("unauthorized");
+                return res.code(401).send(errorResponse(401, "Unauthorized", "Passowrd not matching"));
             }
             const userToken = getJwtUser(fastify, id, UserName, isadmin);
-            return res.send({ userToken });
+            return res.status(200).send(successResponse(200, { userToken }));
         } catch (error) {
-            console.error(error)
-            res.code(500).send('Error login user')
+            res.status(500).send(errorResponse(500, 'Error login user'))
         } finally {
             client.release()
         }
@@ -61,7 +57,7 @@ module.exports.authRoutes = async (fastify) => {
         if (verifyIfDateIsExpired(exp)) {
             res.code(401).send("expired token");
         }
-        return res.send({ isAdmin: !!admin });
+        return res.status(200).send(successResponse(200, { isAdmin: !!admin }));
     });
 
 }
@@ -83,4 +79,12 @@ function jwtExpDate() {
 
 function verifyIfDateIsExpired(milliseconds) {
     return milliseconds < new Date().getTime();
+}
+
+function successResponse(statusCode, payload) {
+    return { statusCode, payload }
+}
+
+function errorResponse(statusCode, error, message = null) {
+    return { statusCode, error, ...message && { message } }
 }

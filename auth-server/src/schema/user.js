@@ -1,99 +1,148 @@
 const validUser = {
     type: 'object',
-    required: ['UserName', 'CRCPassword', 'isAdmin'],
+    required: ['UserName', 'password', 'isAdmin'],
     properties: {
         UserName: {
-            type: 'string'
+            type: 'string', minLength: 3, maxLength: 50
         },
-        CRCPassword: {
-            type: 'string'
+        password: {
+            type: 'string', minLength: 6, maxLength: 24
         },
         isAdmin: {
             type: 'boolean'
         }
     }
-    // ,
-    // example: {
-    //     statusCode: 404,
-    //     error: "Invalid user"
-    // }
+}
+
+const genericErrorResponse = {
+    type: 'object',
+    required: ['statusCode', 'error'],
+    properties: {
+        statusCode: {
+            type: 'integer'
+        },
+        error: {
+            type: 'string'
+        }
+    },
+    example: {
+        statusCode: 500,
+        error: "Unknown Error"
+    }
 };
 
-const bookValidationSchema = {
+const unauthorizedErrorResponse = {
     type: 'object',
+    required: ['statusCode', 'error', 'message'],
     properties: {
-        title: {
-            type: 'string'
-        },
-        author: {
-            type: 'string'
-        },
-        isbn: {
-            type: 'string',
-            pattern: "^\\d{13}$"
-        },
-        published_year: {
-            type: 'number'
-        },
-    }
-}
-const bookValidationSchemaWithRequired = {
-    ...bookValidationSchema,
-    required: ['title', 'author', 'isbn', 'published_year']
-}
-const idParamsJsonSchema = {
-    type: 'object',
-    properties: {
-        id: { type: 'integer' }
-    }
-}
-
-const queryStringJsonSchema = {
-    type: 'object',
-    properties: {
-        authordName: {
-            type: 'array',
-            default: []
-        },
-        publicationYear: {
-            type: 'array',
-            default: [],
-            items: {
-                type: 'integer'
-            }
-        },
-        orderBy: {
-            type: 'string',
-            enum: ['ASC', 'DESC']
-        },
-        page: {
+        statusCode: {
             type: 'integer'
         },
-        rowPage: {
-            type: 'integer'
+        error: {
+            type: 'string'
+        },
+        message: {
+            type: 'string'
         }
+    },
+    example: {
+        statusCode: 401,
+        error: "Unauthorized",
+        message: 'Token Expired'
     }
-}
+};
+
+const notFoundErrorResponse = {
+    type: 'object',
+    required: ['statusCode', 'error', 'message'],
+    properties: {
+        statusCode: {
+            type: 'integer'
+        },
+        error: {
+            type: 'string'
+        },
+        message: {
+            type: 'string'
+        }
+    },
+    example: {
+        statusCode: 404,
+        error: "Not Found",
+        message: 'User doesnt exist'
+    }
+};
+
+const createdResponse = {
+    type: 'object',
+    required: ['statusCode', 'payload'],
+    properties: {
+        statusCode: {
+            type: 'integer'
+        },
+        payload: {
+            type: 'string'
+        }
+    },
+    example: {
+        statusCode: 201,
+        payload: 'User created'
+    }
+};
+
+const successResponse = {
+    type: 'object',
+    required: ['statusCode', 'payload'],
+    properties: {
+        statusCode: {
+            type: 'integer'
+        },
+        payload: {
+            type: 'object'
+        }
+    },
+    example: {
+        statusCode: 200,
+        payload: { userToken: 'hasfljkashflkasbfaldi' }
+    }
+};
 
 
 
 const signOpts = {
     schema: {
         body: validUser,
-    },
-    response: {
-        // 404: bookNotFoundResponse
+        response: {
+            500: genericErrorResponse,
+            201: createdResponse
+        }
     }
 }
 
 
 const loginOpts = {
     schema: {
+        response: {
+            500: genericErrorResponse,
+            404: notFoundErrorResponse,
+            401: unauthorizedErrorResponse,
+            200: successResponse
+        }
     }
 }
 
 const verifyOpts = {
     schema: {
+        response: {
+            500: genericErrorResponse,
+            401: unauthorizedErrorResponse,
+            200: {
+                ...successResponse, example: {
+                    statusCode: 200,
+                    payload: { isAdmin: true }
+                }
+            }
+        }
     }
 }
 
