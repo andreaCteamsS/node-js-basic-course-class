@@ -11,13 +11,13 @@ POST http://localhost:3001/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "UserName": "Don Quixote 3647384",  
-    "password": "Miguel de Cervantes"
+  "UserName": "pippo",
+  "password": "pippopippo"
 }
 ###
 GET http://localhost:3001/verify HTTP/1.1 
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsIm5hbWUiOiJEb24gUXVpeG90ZSAzNjQ3Mzg0IiwiYWRtaW4iOjEsImV4cCI6MTcyNjEyOTQ1NzQ2MywiaWF0IjoxNzI2MTI4NTU3fQ.V0X_-pjpJID02gjuHur-ToAHXhREYPd4iWczB6zxcvY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsIm5hbWUiOiJEb24gUXVpeG90ZSAzNjQ3Mzg0IiwiYWRtaW4iOjEsImV4cCI6MTcyNjEzNDYyMzI3OCwiaWF0IjoxNzI2MTMzNzIzfQ.qV9WWkJRkKf_lX0uhq0ZnO_vyMlJePAUgEb7o9dK76Y
 ### expired token
 GET http://localhost:3001/verify HTTP/1.1 
 Content-Type: application/json

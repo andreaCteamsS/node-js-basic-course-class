@@ -1,10 +1,11 @@
-GET http://localhost:3000 HTTP/1.1
-### delimitatori di richieste
 GET http://localhost:3000/books HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE1LCJuYW1lIjoicGlwcG8iLCJhZG1pbiI6MSwiZXhwIjoxNzI2MTM1OTA1NDYzLCJpYXQiOjE3MjYxMzUwMDV9.-AvNVDIHyRWuW72XwvEDMFuzeeBb-Yd_ITXe6VQ0_vg
 ### delimitatori di richieste
-GET http://localhost:3000/books/1123 HTTP/1.1
+GET http://localhost:3000/books/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE1LCJuYW1lIjoicGlwcG8iLCJhZG1pbiI6MSwiZXhwIjoxNzI2MTM1OTA1NDYzLCJpYXQiOjE3MjYxMzUwMDV9.-AvNVDIHyRWuW72XwvEDMFuzeeBb-Yd_ITXe6VQ0_vg
 ### delimitatori di richieste
 POST http://localhost:3000/books HTTP/1.1 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE1LCJuYW1lIjoicGlwcG8iLCJhZG1pbiI6MCwiZXhwIjoxNzI2MTM2MTE0NzE1LCJpYXQiOjE3MjYxMzUyMTR9.TanS2y0C5L7LmpSnYwFEZ7diimHsHd_zDf9LqSMl6Us
 Content-Type: application/json
 
 {
@@ -14,13 +15,13 @@ Content-Type: application/json
  "published_year": 1605
 }
 ### delimitatori di richieste
-PUT  http://localhost:3000/books/27 HTTP/1.1 
+PUT  http://localhost:3000/books/7 HTTP/1.1 
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE1LCJuYW1lIjoicGlwcG8iLCJhZG1pbiI6MSwiZXhwIjoxNzI2MTM2MjE2NTI3LCJpYXQiOjE3MjYxMzUzMTZ9.dwgD31Oz26iXCapt7fk3jbCZT7G8phjRAv-QYyr9j5I
 Content-Type: application/json
 
 {
-"title": "Don Quixote 13"
+"title": "ciao"
 }
 ### delimitatori di richieste
-delete http://localhost:3000/books/27 HTTP/1.1
-### delimitatori di richieste
-GET http://localhost:3000/books?authordName=Miguel de Cervantes&authordName=Dante Alighieri&publicationYear=1605&publicationYear=1851&orderBy=ASC&page=1&rowPage=10 HTTP/1.1
+delete http://localhost:3000/books/7 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE1LCJuYW1lIjoicGlwcG8iLCJhZG1pbiI6MSwiZXhwIjoxNzI2MTM2MjE2NTI3LCJpYXQiOjE3MjYxMzUzMTZ9.dwgD31Oz26iXCapt7fk3jbCZT7G8phjRAv-QYyr9j5I

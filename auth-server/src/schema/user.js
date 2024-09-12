@@ -98,12 +98,35 @@ const successResponse = {
             type: 'integer'
         },
         payload: {
-            type: 'object'
+            type: 'object',
+            properties: {
+                userToken: {type: 'string'}
+            }
         }
     },
     example: {
         statusCode: 200,
         payload: { userToken: 'hasfljkashflkasbfaldi' }
+    }
+};
+
+const successResponseIsAdmin = {
+    type: 'object',
+    required: ['statusCode', 'payload'],
+    properties: {
+        statusCode: {
+            type: 'integer'
+        },
+        payload: {
+            type: 'object',
+            properties: {
+                isAdmin: {type: 'boolean'}
+            }
+        }
+    },
+    example: {
+        statusCode: 200,
+        payload: { isAdmin: true }
     }
 };
 
@@ -136,12 +159,7 @@ const verifyOpts = {
         response: {
             500: genericErrorResponse,
             401: unauthorizedErrorResponse,
-            200: {
-                ...successResponse, example: {
-                    statusCode: 200,
-                    payload: { isAdmin: true }
-                }
-            }
+            200: successResponseIsAdmin
         }
     }
 }

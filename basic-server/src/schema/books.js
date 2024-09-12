@@ -1,3 +1,5 @@
+const { verifyToken } = require("../routes/v1/verify");
+
 const bookNotFoundResponse = {
     type: 'object',
     properties: {
@@ -77,36 +79,51 @@ const queryStringJsonSchema = {
 const getBooksOpts = {
     schema: {
         querystring: queryStringJsonSchema
-    }
+    },
+    preHandler: [
+        verifyToken()
+    ]
 }
 
 const getBookOpts = {
     schema: {
         params: idParamsJsonSchema,
+        response: {
+            404: bookNotFoundResponse
+        }
     },
-    response: {
-        404: bookNotFoundResponse
-    }
+    preHandler: [
+        verifyToken()
+    ]
 }
 
 
 const postBookOpts = {
     schema: {
         body: bookValidationSchemaWithRequired
-    }
+    },
+    preHandler: [
+        verifyToken(true)
+    ]
 }
 
 const putBookOpts = {
     schema: {
         params: idParamsJsonSchema,
         body: bookValidationSchema
-    }
+    },
+    preHandler: [
+        verifyToken(true)
+    ]
 }
 
 const deleteBookOpts = {
     schema: {
         params: idParamsJsonSchema,
-    }
+    },
+    preHandler: [
+        verifyToken(true)
+    ]
 }
 
 module.exports = {

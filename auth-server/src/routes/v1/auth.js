@@ -43,7 +43,8 @@ module.exports.authRoutes = async (fastify) => {
                 return res.code(401).send(errorResponse(401, "Unauthorized", "Passowrd not matching"));
             }
             const userToken = getJwtUser(fastify, id, UserName, isadmin);
-            return res.status(200).send(successResponse(200, { userToken }));
+            const r = successResponse(200, { userToken })
+            return res.status(200).send(r);
         } catch (error) {
             res.status(500).send(errorResponse(500, 'Error login user'))
         } finally {
@@ -55,7 +56,7 @@ module.exports.authRoutes = async (fastify) => {
     fastify.get('/verify', verifyOpts, async (req, res) => {
         const { sub, name, admin, exp } = await req.jwtVerify();
         if (verifyIfDateIsExpired(exp)) {
-            res.code(401).send("expired token");
+            res.code(401).send(errorResponse(401, "Token Expired"));
         }
         return res.status(200).send(successResponse(200, { isAdmin: !!admin }));
     });
@@ -81,8 +82,10 @@ function verifyIfDateIsExpired(milliseconds) {
     return milliseconds < new Date().getTime();
 }
 
-function successResponse(statusCode, payload) {
-    return { statusCode, payload }
+function successResponse(statusCode, p) {
+    console.log({ statusCode, payload: p});
+    
+    return ({ statusCode, payload: p})
 }
 
 function errorResponse(statusCode, error, message = null) {
