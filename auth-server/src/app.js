@@ -11,14 +11,17 @@ module.exports.build = (
     swaggerOpts = {},
     swaggerUiOpts = {},
     fastifyPOstgresOpts = {},
-    fBcryptOpts = {}
+    fBcryptOpts = {},
+    fJwtOpts = {}
 ) => {
     const app = fastify(opts);
     app.register(fastifySwagger, swaggerOpts);
     app.register(fastifySwaggerUi, swaggerUiOpts);
     app.register(fastifyPOstgres, fastifyPOstgresOpts);
+    app.register(require("@fastify/jwt"), fJwtOpts)
+    app.register(fBcrypt, fBcryptOpts)
+    //
     app.register(authRoutes);
     app.register(healthCheck);
-    app.register(fBcrypt, fBcryptOpts)
     return app;
 }

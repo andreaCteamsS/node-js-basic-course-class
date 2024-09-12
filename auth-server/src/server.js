@@ -1,5 +1,5 @@
 
-const { POSTGRES_DB_CONNECTION, PORT } = require('./config/env');
+const { POSTGRES_DB_CONNECTION, PORT, BCRYPT_SALT, JWT_SECRET } = require('./config/env');
 
 const app = require('./app').build(
     { logger: true },
@@ -11,7 +11,8 @@ const app = require('./app').build(
     {
         connectionString: POSTGRES_DB_CONNECTION
     },
-    { saltWorkFactor: 12 }
+    { saltWorkFactor: BCRYPT_SALT },
+    { secret: JWT_SECRET }
 );
 
 app.listen({ port: PORT, host: "localhost" }, (err) => {

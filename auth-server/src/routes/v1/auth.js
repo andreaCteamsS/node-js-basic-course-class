@@ -12,7 +12,17 @@ module.exports.authRoutes = async (fastify) => {
                 'INSERT INTO siteuser(UserName, CRCPassword, isAdmin) VALUES($1,$2,$3) RETURNING id',
                 [UserName, hashedPassword, isAdmin ? 1 : 0]
             );
-            res.send({ bookAdded: rows[0].id });
+            const addedUser = rows[0];
+            if (!!addedUser) {
+                const userToken = fastify.jwt.sign({
+                    sub: addedUser.id,
+                    name: UserName,
+                    admin: isAdmin,
+                    exp: jwtExpDate()  
+                });
+                return res.send({userToken});
+            }
+            throw new Error();
         } catch (error) {
             console.error(error)
             res.code(500).send('Error adding user')
@@ -31,4 +41,11 @@ module.exports.authRoutes = async (fastify) => {
       
     });
     
+}
+
+
+function jwtExpDate() {
+    let now = new Date();
+    now.setMinutes(now.getMinutes() + 15);
+    return now.getTime();
 }
